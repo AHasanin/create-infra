@@ -1,22 +1,22 @@
 ---
-- name: "Update yum packages"
+- name: "Update apt packages"
   become: yes
-  yum:
+  apt:
     update_cache: yes
 
-# - name: "Upgrade yum packages"
-#   become: yes
-#   yum:
-#     upgrade: yes
-
-- name: "Add nodejs"
+- name: "Upgrade apt packages"
   become: yes
-  shell: curl --silent --location https://rpm.nodesource.com/setup_14.x | sudo bash -
+  apt:
+    upgrade: yes
+
+# - name: "Add nodejs"
+#   become: yes
+#   shell: curl --silent --location https://rpm.nodesource.com/setup_14.x | sudo bash -
 
 - name: "Install nodejs"
   become: yes
-  yum:
-    name: nodejs
+  apt:
+    name: ["nodejs", "npm"]
 
 - name: "Install pm2"
   become: yes
@@ -40,5 +40,5 @@
 
 - name: "Clean unwanted packages"
   become: yes
-  yum:
+  apt:
     autoremove: yes
