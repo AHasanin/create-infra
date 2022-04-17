@@ -1,0 +1,44 @@
+---
+- name: "Update yum packages"
+  become: yes
+  yum:
+    update_cache: yes
+
+# - name: "Upgrade yum packages"
+#   become: yes
+#   yum:
+#     upgrade: yes
+
+- name: "Add nodejs"
+  become: yes
+  shell: curl --silent --location https://rpm.nodesource.com/setup_14.x | sudo bash -
+
+- name: "Install nodejs"
+  become: yes
+  yum:
+    name: nodejs
+
+- name: "Install pm2"
+  become: yes
+  npm:
+    name: pm2
+    global: yes
+
+- name: "Create web directory"
+  shell: mkdir ~/web
+
+- name: "Copy index.js"
+  copy:
+    src: index.js
+    dest: ~/web/index.js
+    backup: yes
+
+- name: "Run Script"
+  shell: |
+    cd ~/web
+    pm2 start index.js -f 
+
+- name: "Clean unwanted packages"
+  become: yes
+  yum:
+    autoremove: yes
